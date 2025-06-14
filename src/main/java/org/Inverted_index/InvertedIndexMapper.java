@@ -1,5 +1,7 @@
-package org.example;
+package org.Inverted_index;
 import java.io.IOException;
+import java.util.StringTokenizer;
+
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.*;
@@ -19,13 +21,13 @@ public class InvertedIndexMapper extends Mapper<LongWritable, Text, Text, IntWri
     @Override
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         String line = value.toString().toLowerCase().replaceAll("[^a-z0-9 ]", " ");
-        String[] words = line.split("\\s+");
+        StringTokenizer tokenizer = new StringTokenizer(line);
 
-        for (String word : words) {
+        while (tokenizer.hasMoreTokens()) {
+            String word = tokenizer.nextToken();
             if (!word.isEmpty()) {
                 context.write(new Text(word + "@" + filename), new IntWritable(1));
             }
         }
     }
 }
-
