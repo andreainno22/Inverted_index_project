@@ -18,6 +18,9 @@ public class InvertedIndexDriver {
         job.setCombinerClass(InvertedIndexCombiner.class);
         job.setReducerClass(InvertedIndexReducer.class);
 
+        // Set number of reducers to 2
+        job.setNumReduceTasks(2);
+
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
@@ -27,4 +30,5 @@ public class InvertedIndexDriver {
         job.waitForCompletion(true);
     }
 }
+
 
