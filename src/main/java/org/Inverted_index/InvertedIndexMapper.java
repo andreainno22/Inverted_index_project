@@ -1,4 +1,5 @@
 package org.Inverted_index;
+
 import java.io.IOException;
 import java.util.StringTokenizer;
 
@@ -10,6 +11,8 @@ import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 public class InvertedIndexMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
 
     private String filename;
+    private final IntWritable one = new IntWritable(1);
+    private final Text wordAtFile = new Text();
 
     @Override
     protected void setup(Context context) {
@@ -26,7 +29,8 @@ public class InvertedIndexMapper extends Mapper<LongWritable, Text, Text, IntWri
         while (tokenizer.hasMoreTokens()) {
             String word = tokenizer.nextToken();
             if (!word.isEmpty()) {
-                context.write(new Text(word + "@" + filename), new IntWritable(1));
+                wordAtFile.set(word + "@" + filename);
+                context.write(wordAtFile, one);
             }
         }
     }
