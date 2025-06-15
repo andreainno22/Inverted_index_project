@@ -9,6 +9,11 @@ import org.apache.hadoop.mapreduce.lib.output.*;
 
 public class InvertedIndexDriver {
     public static void main(String[] args) throws Exception {
+        if (args.length < 3) {
+            System.err.println("Usage: InvertedIndexDriver <input path> <output path> <num reducers>");
+            System.exit(-1);
+        }
+
         Configuration conf = new Configuration();
 
         Job job = Job.getInstance(conf, "Inverted Index");
@@ -18,11 +23,12 @@ public class InvertedIndexDriver {
         job.setCombinerClass(InvertedIndexCombiner.class);
         job.setReducerClass(InvertedIndexReducer.class);
 
-        // Set number of reducers to 2
-        job.setNumReduceTasks(2);
-
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
+
+        // Set number of reducers dynamically
+        int numReducers = Integer.parseInt(args[2]);
+        job.setNumReduceTasks(numReducers);
 
         TextInputFormat.setInputPaths(job, new Path(args[0]));
         TextOutputFormat.setOutputPath(job, new Path(args[1]));
@@ -30,5 +36,6 @@ public class InvertedIndexDriver {
         job.waitForCompletion(true);
     }
 }
+
 
 
