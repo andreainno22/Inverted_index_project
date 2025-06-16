@@ -7,7 +7,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 public class InvertedIndexReducer extends Reducer<Text, IntWritable, Text, Text> {
 
-    private Map<String, List<String>> invertedIndex = new HashMap<>();
+    private final Map<String, List<String>> invertedIndex = new HashMap<>();
 
     @Override
     protected void reduce(Text key, Iterable<IntWritable> values, Context context)
