@@ -15,8 +15,8 @@ import java.util.Comparator;
 public class InvertedIndexDriver {
     private static final long chunkSizeMB = 10; // Dimensione del chunk in MB
     public static void main(String[] args) throws Exception {
-        if (args.length < 4) {
-            System.err.println("Usage: InvertedIndexDriver <input path> <output path> <num reducers> <totalMB>");
+        if (args.length < 5) {
+            System.err.println("Usage: InvertedIndexDriver <input path> <output path> <num reducers> <totalMB> <use inMapperCombiner>");
             System.exit(-1);
         }
 
@@ -25,8 +25,14 @@ public class InvertedIndexDriver {
         Job job = Job.getInstance(conf, "Inverted Index");
         job.setJarByClass(InvertedIndexDriver.class);
 
-        job.setMapperClass(InvertedIndexMapper.class);
-        job.setCombinerClass(InvertedIndexCombiner.class);
+        // to use the in-mapper combiner if specified
+        if (!Boolean.parseBoolean(args[4])) {
+            job.setMapperClass(InvertedIndexMapper.class);
+            job.setCombinerClass(InvertedIndexCombiner.class);
+        }   else {
+            job.setMapperClass(InvertedIndexMapper_inMapperCombiner.class);
+        }
+
         job.setReducerClass(InvertedIndexReducer.class);
 
         job.setOutputKeyClass(Text.class);
