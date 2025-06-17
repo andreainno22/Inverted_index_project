@@ -3,13 +3,16 @@ import sys
 import termios
 import tty
 
+# Define stopwords (same as Java version)
+STOPWORDS = {
+    "the", "is", "and", "in", "to", "of", "a", "with", "on", "for", "an", "by", "at",
+    "this", "that", "it", "be", "as", "from", "or", "are", "was", "were", "which",
+    "has", "have", "had", "but", "not", "they", "their", "its"
+}
+
 def get_line_or_esc():
-    """
-    Read input from the user, exit if ESC is pressed.
-    """
     buffer = ""
     print("Search query (ESC to exit): ", end="", flush=True)
-
     while True:
         ch = sys.stdin.read(1)
         if ch == '\x1b':  # ESC
@@ -48,8 +51,13 @@ def load_inverted_index(path):
 
 def search(index, query):
     terms = query.strip().lower().split()
+    filtered_terms = [term for term in terms if term not in STOPWORDS]
+
+    if not filtered_terms:
+        return set()  # No valid terms to search
+
     result = None
-    for term in terms:
+    for term in filtered_terms:
         if term not in index:
             return set()
         result = index[term] if result is None else result & index[term]
@@ -61,7 +69,6 @@ if __name__ == "__main__":
 
     print("\nType your queries below. Press ESC to exit.\n")
 
-    # Enable raw input mode
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
     try:
@@ -82,3 +89,4 @@ if __name__ == "__main__":
             print()
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
