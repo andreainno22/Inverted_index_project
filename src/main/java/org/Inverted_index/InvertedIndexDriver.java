@@ -24,10 +24,6 @@ public class InvertedIndexDriver {
 
         Configuration conf = new Configuration();
 
-        conf.set("mapreduce.reduce.memory.mb", "4096"); // 2 GB
-        conf.set("mapreduce.reduce.java.opts", "-Xmx1536m"); // JVM heap max
-
-
         Job job = Job.getInstance(conf, "Inverted Index");
         job.setJarByClass(InvertedIndexDriver.class);
 
