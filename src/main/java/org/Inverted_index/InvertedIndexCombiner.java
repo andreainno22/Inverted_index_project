@@ -5,6 +5,14 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 public class InvertedIndexCombiner extends Reducer<Text, IntWritable, Text, IntWritable> {
 
+    /**
+     * The reduce method aggregates the counts of words across different files.
+     * It computes the sum of counts for each word and emits the result.
+     *
+     * @param key The word and filename combination (e.g., "word@filename").
+     * @param values The counts of the word in the specified file.
+     * @param context The context to write the output.
+     */
     @Override
     protected void reduce(Text key, Iterable<IntWritable> values, Context context)
             throws IOException, InterruptedException {
