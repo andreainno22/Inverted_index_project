@@ -1,1 +1,0 @@
-To-do List: Pulire dataset da valori nulli, implementare funzione di clustering, validare pattern rilevati con partite di test, scrivere report finale, preparare presentazione per revisione

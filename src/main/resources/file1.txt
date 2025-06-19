@@ -1,9 +1,0 @@
-Titolo: Analisi dei dati di gioco
-
-Obiettivo: Studiare il comportamento dei tennisti in funzione della superficie di gioco.
-
-Passaggi:
-- Raccolta dati match ATP 2022-2024
-- Normalizzazione colpi (servizio, risposta, scambi)
-- Estrazione pattern frequenti
-- Visualizzazione tramite heatmap e grafici di rete
